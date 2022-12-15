@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="NLog" Version="5.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FootballBooking.Application\FootballBooking.Application.csproj" />
+    <ProjectReference Include="..\FootballBooking.Entities\FootballBooking.Entities.csproj" />
+    <ProjectReference Include="..\FootballBooking.Infrastructure\FootballBooking.Infrastructure.csproj" />
+    <ProjectReference Include="..\FootballBooking.Migrations\FootballBooking.Migrations.csproj" />
+    <ProjectReference Include="..\FootballBooking.Test\FootballBooking.Test.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="initdb\" />
+  </ItemGroup>
+
+
+</Project>
