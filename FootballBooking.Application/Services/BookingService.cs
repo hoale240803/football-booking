@@ -21,5 +21,7 @@ namespace FootballBooking.Application.Services
 
             return PagedList<Booking>.ToPagedList(bookings.AsQueryable(), queryParams.PageNumber, queryParams.PageSize);
         }
+
+
     }
 }

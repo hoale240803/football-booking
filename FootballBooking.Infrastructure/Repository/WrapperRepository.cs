@@ -3,16 +3,17 @@ using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Infrastructure.Repository
 {
-    public class RepositoryWrapper : IRepositoryWrapper
+    public class WrapperRepository : IWrapperRepository
     {
         private readonly FootballBookingDbContext _footballBookingContext;
 
-        private IBookingRepository _booking;
-        private IBookerRepository _booker;
-        private IStadiumRepository _stadium;
-        private IStadiumOwnerRepository _stadiumOwner;
+        private IBookingRepository? _booking;
+        private IBookerRepository? _booker;
+        private IStadiumRepository? _stadium;
+        private IStadiumOwnerRepository? _stadiumOwner;
+        private IAddressRepository? _address;
 
-        public RepositoryWrapper(FootballBookingDbContext footballBookingContext)
+        public WrapperRepository(FootballBookingDbContext footballBookingContext)
         {
             _footballBookingContext = footballBookingContext;
         }
@@ -69,14 +70,32 @@ namespace FootballBooking.Infrastructure.Repository
             }
         }
 
+        public IAddressRepository Address
+        {
+            get
+            {
+                if (_address == null)
+                {
+                    _stadiumOwner = new StadiumOwnerRepository(_footballBookingContext);
+                    return _address;
+                }
+                return _address;
+            }
+        }
+
+        public IDatabaseTransaction BeginTransaction()
+        {
+            return new DatabaseTransaction(_footballBookingContext);
+        }
+
         public void Save()
         {
             _footballBookingContext.SaveChanges();
         }
 
-        public void SaveAsync()
+        public async Task SaveAsync()
         {
-            _footballBookingContext.SaveChangesAsync();
+            await _footballBookingContext.SaveChangesAsync();
         }
     }
 }

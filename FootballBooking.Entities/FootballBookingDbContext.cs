@@ -1,19 +1,29 @@
 ﻿using FootballBooking.Entities.EntityConfigurations;
 using FootballBooking.Entities.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace FootballBooking.Entities
 {
     public class FootballBookingDbContext : DbContext
     {
-        public FootballBookingDbContext(DbContextOptions<FootballBookingDbContext> options)
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+        public FootballBookingDbContext(DbContextOptions<FootballBookingDbContext> options, IConfiguration configuration)
             : base(options)
         {
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("FootballBooking");
         }
 
         public FootballBookingDbContext()
         {
         }
+
+        public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
 
         public DbSet<Booker> Booker { get; set; }
         public DbSet<Booking> Booking { get; set; }

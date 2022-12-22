@@ -32,11 +32,6 @@ namespace FootballBooking.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> GetBookingById(Guid id)
         {
-            //_logger.LogInfo("Fetching all the Students from the storage");
-            //var booking = DataManager.GetAllStudents(); //simulation for the data base access
-            // throw new AccessViolationException("Violation Exception while accessing the resource.");
-            //  _logger.LogInfo($"Returning {students.Count} students.");
-
             var booking = await _bookingService.GetByIdAsync(id);
 
             return Ok(_mapper.Map<BookingDTO>(booking));
