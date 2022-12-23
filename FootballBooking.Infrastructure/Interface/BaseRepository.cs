@@ -1,9 +1,9 @@
 ﻿using FootballBooking.Entities;
 using FootballBooking.Entities.Model;
-using FootballBooking.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace FootballBooking.Infrastructure.Base
+namespace FootballBooking.Infrastructure.Interface
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
@@ -24,6 +24,11 @@ namespace FootballBooking.Infrastructure.Base
         {
             await _footballBookingContext.Set<T>().AddRangeAsync(entities);
             await _footballBookingContext.SaveChangesAsync();
+        }
+
+        public IDatabaseTransaction BeginTransaction()
+        {
+            return new DatabaseTransaction(_footballBookingContext);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -55,6 +60,13 @@ namespace FootballBooking.Infrastructure.Base
         {
             return _footballBookingContext.Set<T>();
         }
+
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return _footballBookingContext.Set<T>().Where(expression).AsNoTracking();
+            //return _footballBookingContext.Set<T>().Where(expression);
+        }
+
 
         public async Task<T> GetByIdAsync(Guid id)
         {

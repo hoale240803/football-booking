@@ -1,9 +1,9 @@
 ﻿namespace FootballBooking.Entities.DTOs
 {
-    public class StadiumParams : QueryParams
+    public class StadiumQueryParams : QueryParams
     {
-        public AddressDTO Address { get; set; }
-
         public string Name { get; set; }
+
+        public AddressDTO Address { get; set; }
     }
 }

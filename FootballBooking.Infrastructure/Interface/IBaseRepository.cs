@@ -19,5 +19,7 @@ namespace FootballBooking.Infrastructure.Interface
         Task<T> GetByIdAsync(Guid id);
 
         IQueryable<T> FindAll();
+
+        IDatabaseTransaction BeginTransaction();
     }
 }
