@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FootballBooking.Application.Services
 {
-    public class BaseService<T> : IBaseRepository<T>, IBaseService<T> where T : BaseEntity
+    public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
         private readonly IBaseRepository<T> _baseRepository;
 

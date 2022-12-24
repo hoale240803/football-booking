@@ -36,9 +36,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// TODO: configure Exception service
-//var logger = app.Services.GetRequiredService<ILoggerManager>();
-//app.ConfigureExceptionHandler(logger);
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,22 +1,17 @@
-﻿using FootballBooking.Entities.Enum;
+﻿using FootballBooking.Entities.DTOs.Base;
+using FootballBooking.Entities.DTOs.Validator;
 
 namespace FootballBooking.Entities.DTOs
 {
-    public class StadiumDTO
+    public class StadiumDTO : StadiumBase
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public AddressDTO Address { get; set; }
 
-        public int Price { get; set; }
 
-        public Guid AddressId { get; set; }
-        public string Address { get; set; }
-        public StadiumStatusEnum StadiumStatus { get; set; }
-
-        // Properties Owner
-        public Guid OwnerId { get; set; }
-
-        public string OwnerName { get; set; }
-        public string PhoneNumber { get; set; }
+        public void ValidateStadium()
+        {
+            AddressValidator addValidator = new AddressValidator();
+            addValidator.Validate(Address);
+        }
     }
 }

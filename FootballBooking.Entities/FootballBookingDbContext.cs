@@ -17,10 +17,13 @@ namespace FootballBooking.Entities
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("FootballBooking");
+            
+
         }
 
         public FootballBookingDbContext()
         {
+    
         }
 
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);

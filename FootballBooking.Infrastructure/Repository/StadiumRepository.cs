@@ -1,12 +1,14 @@
 ﻿using Dapper;
 using FootballBooking.Entities;
 using FootballBooking.Entities.DTOs;
+using FootballBooking.Entities.DTOs.Res;
 using FootballBooking.Entities.Enum;
 using FootballBooking.Entities.Helpers;
 using FootballBooking.Entities.Model;
 using FootballBooking.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Data.Common;
 
 namespace FootballBooking.Infrastructure.Repository
 {
@@ -29,14 +31,14 @@ namespace FootballBooking.Infrastructure.Repository
             await DeleteAsync(stadiumId);
         }
 
-        public async Task<IList<StadiumDTO>> GetAvailableStadiumsAsync(QueryParams queryParams)
+        public async Task<IList<StadiumRes>> GetAvailableStadiumsAsync(QueryParams queryParams)
         {
             try
             {
                 var availableStadiumQuery = from stadium in _dbContext.Stadium
                                             join stadiumOwner in _dbContext.StadiumOwner on stadium.StadiumOwnerId equals stadiumOwner.Id
                                             orderby stadium.StadiumStatus
-                                            select new StadiumDTO
+                                            select new StadiumRes
                                             {
                                                 Id = stadium.Id,
                                                 Name = stadium.Name,
@@ -91,9 +93,28 @@ namespace FootballBooking.Infrastructure.Repository
 
             using (var connection = _dbContext.CreateConnection())
             {
-                var stadiums = await connection.QueryAsync<StadiumDTO>(query, parameters);
+                connection.Open();  
+                try
+                {
+  
+                    using (var transation = new DatabaseTransaction(_dbContext))
+                    {
+                        var stadiums = await connection.QueryAsync<StadiumDTO>(query, parameters);
 
-                return PagedList<StadiumDTO>.ToPagedList(stadiums, stadiumParams.PageNumber, stadiumParams.PageSize);
+                        transation.Commit();
+
+                        return PagedList<StadiumDTO>.ToPagedList(stadiums, stadiumParams.PageNumber, stadiumParams.PageSize);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    connection.Close();
+                    throw;
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -118,6 +139,11 @@ namespace FootballBooking.Infrastructure.Repository
         public Task UpdateStadiumAsync(Stadium stadium)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> IsExistingStadiumNameAsync(string stadiumName)
+        {
+            return _dbContext.Stadium.AnyAsync(s => s.Name.Contains(stadiumName));
         }
     }
 }

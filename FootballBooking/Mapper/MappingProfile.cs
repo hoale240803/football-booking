@@ -10,7 +10,7 @@ namespace FootballBooking.Mapper
         {
             CreateMap<BookingDTO, Booking>().ReverseMap();
             CreateMap<StadiumDTO, Stadium>().ReverseMap();
+            CreateMap<AddressDTO, Address>().ReverseMap();
         }
     }
-
 }

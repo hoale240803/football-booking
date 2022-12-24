@@ -1,9 +1,10 @@
 ﻿using FootballBooking.Entities;
 using FootballBooking.Infrastructure.Interface;
+using System.Data;
 
 namespace FootballBooking.Infrastructure.Repository
 {
-    public class WrapperRepository : IWrapperRepository
+    public class WrapperRepository : IWrapperRepository, IDisposable
     {
         private readonly FootballBookingDbContext _footballBookingContext;
 
@@ -16,6 +17,11 @@ namespace FootballBooking.Infrastructure.Repository
         public WrapperRepository(FootballBookingDbContext footballBookingContext)
         {
             _footballBookingContext = footballBookingContext;
+        }
+
+        public WrapperRepository():this (new FootballBookingDbContext())
+        {
+           
         }
 
         public IBookingRepository Booking
@@ -76,7 +82,7 @@ namespace FootballBooking.Infrastructure.Repository
             {
                 if (_address == null)
                 {
-                    _stadiumOwner = new StadiumOwnerRepository(_footballBookingContext);
+                    _address = new AddressRepository(_footballBookingContext);
                     return _address;
                 }
                 return _address;
@@ -97,5 +103,22 @@ namespace FootballBooking.Infrastructure.Repository
         {
             await _footballBookingContext.SaveChangesAsync();
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // Cleanup
+            if (disposing)
+            {
+                // free managed resources
+                //_footballBookingContext.Dispose();
+            }
+        }
+
     }
 }

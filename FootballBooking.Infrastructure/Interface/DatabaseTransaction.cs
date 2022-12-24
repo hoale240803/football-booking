@@ -1,5 +1,6 @@
 ﻿using FootballBooking.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace FootballBooking.Infrastructure.Interface
 {
@@ -10,7 +11,9 @@ namespace FootballBooking.Infrastructure.Interface
         public DatabaseTransaction(FootballBookingDbContext context)
         {
             _transaction = context.Database.BeginTransaction();
+       
         }
+
 
         public void Commit()
         {

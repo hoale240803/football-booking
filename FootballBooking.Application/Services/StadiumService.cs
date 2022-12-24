@@ -1,7 +1,10 @@
-﻿using FootballBooking.Application.Interface;
+﻿using FootballBooking.Application.Exceptions;
+using FootballBooking.Application.Interface;
 using FootballBooking.Entities.DTOs;
+using FootballBooking.Entities.DTOs.Res;
 using FootballBooking.Entities.Helpers;
 using FootballBooking.Entities.Model;
+using FootballBooking.Entities.Resources;
 using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Application.Services
@@ -23,48 +26,41 @@ namespace FootballBooking.Application.Services
         public async Task CreateStadiumAsync(Stadium stadium)
         {
             // 1. TODO: Validate Stadium
-            ValidateStadium(stadium);
+            await ValidateStadiumAsync(stadium);
 
             ValidateAddress(stadium.Address);
 
-            using (var transaction = _wrapperRepository.BeginTransaction())
+            using var transaction = _wrapperRepository.BeginTransaction();
+            try
             {
-                try
-                {
-                    // 2. TODO: Insert Address
-                    //await _addressRepository.AddAsync(stadium.Address);
-                    var task1 = _wrapperRepository.Address.AddAsync(stadium.Address);
+                // 2. Todo: Insert Stadium
 
-                    // 3. TODO: Insert Stadium
-                    //await _stadiumRepository.AddAsync(stadium);
-                    var task2 = _wrapperRepository.Stadium.AddAsync(stadium);
+                stadium.StadiumOwnerId = Guid.Parse("F71F52DB-9007-4F78-9D89-04A53F51B761");
+                stadium.Id = Guid.NewGuid();
+                await _wrapperRepository.Stadium.AddAsync(stadium);
 
-                    Task.WaitAll(task1, task2);
-                    await transaction.CommitAsync();
-                }
-                catch (Exception ex)
-                {
-
-                    await transaction.RollbackAsync();
-                }
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
             }
         }
 
         private void ValidateAddress(Address address)
         {
-            throw new NotImplementedException();
         }
 
-        private void ValidateStadium(Stadium stadium)
+        private async Task ValidateStadiumAsync(Stadium stadium)
         {
             // 1. TODO Check existed name
-            var stadiumName = _stadiumRepository.IsExistingStadiumNameAsync(stadium.Name)
-                ?? throw new ApplicationException($"Stadium {stadium.Name} was existed ");
+            if (await _stadiumRepository.IsExistingStadiumNameAsync(stadium.Name))
+                throw new AppException(ErrorMessages.StadiumWasExisted);
 
             // 2. validate price
         }
 
-        public async Task<IList<StadiumDTO>> GetAvailableStadiumsAsync(QueryParams queryParams)
+        public async Task<IList<StadiumRes>> GetAvailableStadiumsAsync(QueryParams queryParams)
         {
             return await _stadiumRepository.GetAvailableStadiumsAsync(queryParams);
         }

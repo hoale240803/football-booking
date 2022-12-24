@@ -52,8 +52,6 @@ namespace FootballBooking.Controllers
         [HttpPut("{id}")]
         public async Task UpdateBooking(Guid Id, [FromBody] BookingDTO booking)
         {
-            //TODO: Validate 
-
             var bookingEntity = _mapper.Map<Booking>(booking);
             bookingEntity.Id = Id;
             await _bookingService.UpdateAsync(bookingEntity);

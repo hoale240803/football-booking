@@ -44,8 +44,9 @@ namespace FootballBooking.Controllers
         [HttpPost]
         public async Task CreateStadium([FromBody] StadiumDTO stadium)
         {
+            stadium.ValidateStadium();
             var stadiumEntity = _mapper.Map<Stadium>(stadium);
-            await _stadiumService.AddAsync(stadiumEntity);
+            await _stadiumService.CreateStadiumAsync(stadiumEntity);
         }
 
         // PUT api/stadiums

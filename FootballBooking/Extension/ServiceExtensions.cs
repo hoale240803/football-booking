@@ -2,7 +2,6 @@
 using FootballBooking.Application.Interface;
 using FootballBooking.Application.Services;
 using FootballBooking.Entities;
-using FootballBooking.Entities.Model;
 using FootballBooking.Infrastructure.Interface;
 using FootballBooking.Infrastructure.Repository;
 using FootballBooking.Middlewares;
@@ -77,12 +76,11 @@ namespace FootballBooking.Extension
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IStadiumRepository, StadiumRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
-
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             //var provider = services.BuildServiceProvider();
-            //BaseRepository<Stadium> baseRepo = provider.GetService<BaseRepository<Stadium>>();   
+            //BaseRepository<Stadium> baseRepo = provider.GetService<BaseRepository<Stadium>>();
             return services;
-       
         }
 
         public static IServiceCollection AddAppServices(this IServiceCollection services)
