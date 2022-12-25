@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballBooking.Infrastruct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballBooking.Application", "FootballBooking.Application\FootballBooking.Application.csproj", "{F1BD55B2-C5E3-4F57-AD8D-F49FCBA36968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballBooking.Test", "FootballBooking.Test\FootballBooking.Test.csproj", "{A527BC69-CAB1-4D85-9DB1-54481836C46D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballBooking.Test", "FootballBooking.Test\FootballBooking.Test.csproj", "{A527BC69-CAB1-4D85-9DB1-54481836C46D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

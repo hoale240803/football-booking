@@ -15,11 +15,10 @@ namespace FootballBooking.Application.Services
         private readonly IAddressRepository _addressRepository;
         private readonly IWrapperRepository _wrapperRepository;
 
-        public StadiumService(IBaseRepository<Stadium> baseRepository, IStadiumRepository stadiumRepository,
-            IAddressRepository addressRepository, IWrapperRepository wrapperRepository) : base(baseRepository)
+        public StadiumService(IStadiumRepository stadiumRepository,
+            IWrapperRepository wrapperRepository, IBaseRepository<Stadium> baseRepository = null) : base(baseRepository)
         {
             _stadiumRepository = stadiumRepository;
-            _addressRepository = addressRepository;
             _wrapperRepository = wrapperRepository;
         }
 
@@ -62,7 +61,8 @@ namespace FootballBooking.Application.Services
 
         public async Task<IList<StadiumRes>> GetAvailableStadiumsAsync(QueryParams queryParams)
         {
-            return await _stadiumRepository.GetAvailableStadiumsAsync(queryParams);
+            var temp= await _stadiumRepository.GetAvailableStadiumsAsync(queryParams);
+            return temp;
         }
 
         public async Task<PagedList<StadiumDTO>> GetStadiumsAsync(StadiumParams stadiumParams)
