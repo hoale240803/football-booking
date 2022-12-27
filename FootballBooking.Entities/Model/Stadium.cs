@@ -1,23 +1,15 @@
 ﻿using FootballBooking.Entities.Enum;
-using System.ComponentModel.DataAnnotations;
 
 namespace FootballBooking.Entities.Model
 {
-    public class Stadium : BaseEntity
+    public class Stadium : BaseEntity<Guid>
     {
-        [MaxLength(255)]
-        public string Name { get; set; }
-
+        public Guid Id { get; set; }
+        public string Name { get; set; } = null!;
         public int Price { get; set; }
+        public Guid StadiumOwnerId { get; set; }
         public StadiumStatusEnum StadiumStatus { get; set; }
 
-        public Address Address { get; set; }
-
-        public ICollection<Booking> Bookings { get; set; }
-
-        public Guid StadiumOwnerId { get; set; }
-        public StadiumOwner StadiumOwner { get; set; }
-
-
+        public virtual Address? Address { get; set; }
     }
 }

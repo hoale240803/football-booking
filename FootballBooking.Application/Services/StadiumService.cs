@@ -1,4 +1,5 @@
-﻿using FootballBooking.Application.Exceptions;
+﻿using AutoMapper;
+using FootballBooking.Application.Exceptions;
 using FootballBooking.Application.Interface;
 using FootballBooking.Entities.DTOs;
 using FootballBooking.Entities.DTOs.Res;
@@ -9,17 +10,18 @@ using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Application.Services
 {
-    public class StadiumService : BaseService<Stadium>, IStadiumService
+    public class StadiumService : IStadiumService
     {
         private readonly IStadiumRepository _stadiumRepository;
-        private readonly IAddressRepository _addressRepository;
         private readonly IWrapperRepository _wrapperRepository;
+        private readonly IMapper _mapper;
 
         public StadiumService(IStadiumRepository stadiumRepository,
-            IWrapperRepository wrapperRepository, IBaseRepository<Stadium> baseRepository = null) : base(baseRepository)
+            IWrapperRepository wrapperRepository, IMapper mapper)
         {
             _stadiumRepository = stadiumRepository;
             _wrapperRepository = wrapperRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateStadiumAsync(Stadium stadium)
@@ -27,7 +29,7 @@ namespace FootballBooking.Application.Services
             // 1. TODO: Validate Stadium
             await ValidateStadiumAsync(stadium);
 
-            ValidateAddress(stadium.Address);
+            //ValidateAddress(stadium.Address);
 
             using var transaction = _wrapperRepository.BeginTransaction();
             try
@@ -61,13 +63,35 @@ namespace FootballBooking.Application.Services
 
         public async Task<IList<StadiumRes>> GetAvailableStadiumsAsync(QueryParams queryParams)
         {
-            var temp= await _stadiumRepository.GetAvailableStadiumsAsync(queryParams);
+            var temp = await _stadiumRepository.GetAvailableStadiumsAsync(queryParams);
             return temp;
         }
 
         public async Task<PagedList<StadiumDTO>> GetStadiumsAsync(StadiumParams stadiumParams)
         {
             return await _stadiumRepository.GetStadiumsAsync(stadiumParams);
+        }
+
+        public async Task AddStadiumAsync(Stadium stadium)
+        {
+            await _stadiumRepository.AddAsync(stadium);
+        }
+
+        public async Task<StadiumDTO> GetStadiumByIdAsync(Guid id)
+        {
+            var result = _mapper.Map<StadiumDTO>(await _stadiumRepository.GetByIdAsync(id));
+
+            return result;
+        }
+
+        public async Task UpdateStadiumAsync(Stadium stadium)
+        {
+            await _stadiumRepository.UpdateAsync(stadium);
+        }
+
+        public async Task DeleteStadiumAsync(Guid id)
+        {
+            await _stadiumRepository.DeleteAsync(id);
         }
     }
 }

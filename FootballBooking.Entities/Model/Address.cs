@@ -1,22 +1,17 @@
 ﻿namespace FootballBooking.Entities.Model
 {
-    public class Address : BaseEntity
+    public class Address: BaseEntity<Guid>
     {
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string Region { get; set; }
-        public string PostalCode { get; set; }
-        public string Country { get; set; }
-
+        public Guid Id { get; set; }
+        public string? Street { get; set; }
+        public string City { get; set; } = null!;
+        public string? Region { get; set; }
+        public string PostalCode { get; set; } = null!;
+        public string Country { get; set; } = null!;
         public Guid? BookerId { get; set; }
-        public Booker Booker { get; set; }
-
         public Guid? StadiumId { get; set; }
-        public Stadium Stadium { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Booker?.Name ?? ""} {Street}, {City} {PostalCode}, {Country}";
-        }
+        public virtual User? Booker { get; set; }
+        public virtual Stadium? Stadium { get; set; }
     }
 }

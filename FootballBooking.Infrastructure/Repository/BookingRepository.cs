@@ -4,7 +4,7 @@ using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Infrastructure.Repository
 {
-    public class BookingRepository : BaseRepository<Booking>, IBookingRepository
+    public class BookingRepository : BaseRepository<Booking, Guid>, IBookingRepository
     {
         public BookingRepository(FootballBookingDbContext footballBookingContext) : base(footballBookingContext)
         {

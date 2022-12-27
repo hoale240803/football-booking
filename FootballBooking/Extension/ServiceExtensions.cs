@@ -1,12 +1,16 @@
 ﻿using FootballBooking.ActionFilters;
 using FootballBooking.Application.Interface;
 using FootballBooking.Application.Services;
+using FootballBooking.Configurations;
 using FootballBooking.Entities;
 using FootballBooking.Infrastructure.Interface;
 using FootballBooking.Infrastructure.Repository;
 using FootballBooking.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NLog;
+using System.Text;
 
 namespace FootballBooking.Extension
 {
@@ -73,19 +77,18 @@ namespace FootballBooking.Extension
         public static IServiceCollection ConfigureRepository(this IServiceCollection services)
         {
             services.AddScoped<IWrapperRepository, WrapperRepository>();
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
             services.AddScoped<IStadiumRepository, StadiumRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
 
-            //var provider = services.BuildServiceProvider();
-            //BaseRepository<Stadium> baseRepo = provider.GetService<BaseRepository<Stadium>>();
+
             return services;
         }
 
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
+
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IStadiumService, StadiumService>();
 
@@ -113,6 +116,30 @@ namespace FootballBooking.Extension
         public static void AddAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Program));
+        }
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        {
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = JwtTokenValidationParameters.ValidIssuer,
+                    ValidAudience = JwtTokenValidationParameters.ValidAudience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtTokenValidationParameters.IssuerSigningKey))
+                };
+            });
+
+            return services;
         }
     }
 }

@@ -25,7 +25,6 @@ namespace FootballBooking.Migrations
             modelBuilder.Entity("FootballBooking.Entities.Model.Address", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("BookerId")
@@ -54,41 +53,20 @@ namespace FootballBooking.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookerId")
+                    b.HasIndex(new[] { "BookerId" }, "IX_Address_BookerId")
                         .IsUnique()
-                        .HasFilter("[BookerId] IS NOT NULL");
+                        .HasFilter("([BookerId] IS NOT NULL)");
 
-                    b.HasIndex("StadiumId")
+                    b.HasIndex(new[] { "StadiumId" }, "IX_Address_StadiumId")
                         .IsUnique()
-                        .HasFilter("[StadiumId] IS NOT NULL");
+                        .HasFilter("([StadiumId] IS NOT NULL)");
 
                     b.ToTable("Address", (string)null);
-                });
-
-            modelBuilder.Entity("FootballBooking.Entities.Model.Booker", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Booker", (string)null);
                 });
 
             modelBuilder.Entity("FootballBooking.Entities.Model.Booking", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BookTime")
@@ -102,9 +80,9 @@ namespace FootballBooking.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookerId");
+                    b.HasIndex(new[] { "BookerId" }, "IX_Booking_BookerId");
 
-                    b.HasIndex("StadiumId");
+                    b.HasIndex(new[] { "StadiumId" }, "IX_Booking_StadiumId");
 
                     b.ToTable("Booking", (string)null);
                 });
@@ -112,7 +90,6 @@ namespace FootballBooking.Migrations
             modelBuilder.Entity("FootballBooking.Entities.Model.Stadium", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -131,36 +108,68 @@ namespace FootballBooking.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StadiumOwnerId");
+                    b.HasIndex(new[] { "StadiumOwnerId" }, "IX_Stadium_StadiumOwnerId");
 
                     b.ToTable("Stadium", (string)null);
                 });
 
-            modelBuilder.Entity("FootballBooking.Entities.Model.StadiumOwner", b =>
+            modelBuilder.Entity("FootballBooking.Entities.Model.StadiumBooking", b =>
                 {
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<Guid>("StadiumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("StadiumId");
+
+                    b.ToTable("StadiumBooking", (string)null);
+                });
+
+            modelBuilder.Entity("FootballBooking.Entities.Model.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PhoneNumber")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("StadiumOwner", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("FootballBooking.Entities.Model.Address", b =>
                 {
-                    b.HasOne("FootballBooking.Entities.Model.Booker", "Booker")
+                    b.HasOne("FootballBooking.Entities.Model.User", "Booker")
                         .WithOne("Address")
-                        .HasForeignKey("FootballBooking.Entities.Model.Address", "BookerId");
+                        .HasForeignKey("FootballBooking.Entities.Model.Address", "BookerId")
+                        .HasConstraintName("FK_Address_User");
 
                     b.HasOne("FootballBooking.Entities.Model.Stadium", "Stadium")
                         .WithOne("Address")
@@ -173,53 +182,44 @@ namespace FootballBooking.Migrations
 
             modelBuilder.Entity("FootballBooking.Entities.Model.Booking", b =>
                 {
-                    b.HasOne("FootballBooking.Entities.Model.Booker", "Booker")
+                    b.HasOne("FootballBooking.Entities.Model.User", "Booker")
                         .WithMany("Bookings")
                         .HasForeignKey("BookerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FootballBooking.Entities.Model.Stadium", "Stadium")
-                        .WithMany("Bookings")
-                        .HasForeignKey("StadiumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Booking_User");
 
                     b.Navigation("Booker");
+                });
+
+            modelBuilder.Entity("FootballBooking.Entities.Model.StadiumBooking", b =>
+                {
+                    b.HasOne("FootballBooking.Entities.Model.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .IsRequired()
+                        .HasConstraintName("FK_StadiumBooking_Booking");
+
+                    b.HasOne("FootballBooking.Entities.Model.Stadium", "Stadium")
+                        .WithMany()
+                        .HasForeignKey("StadiumId")
+                        .IsRequired()
+                        .HasConstraintName("FK_StadiumBooking_Stadium");
+
+                    b.Navigation("Booking");
 
                     b.Navigation("Stadium");
                 });
 
             modelBuilder.Entity("FootballBooking.Entities.Model.Stadium", b =>
                 {
-                    b.HasOne("FootballBooking.Entities.Model.StadiumOwner", "StadiumOwner")
-                        .WithMany("Stadiums")
-                        .HasForeignKey("StadiumOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StadiumOwner");
+                    b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("FootballBooking.Entities.Model.Booker", b =>
+            modelBuilder.Entity("FootballBooking.Entities.Model.User", b =>
                 {
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("Address");
 
                     b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("FootballBooking.Entities.Model.Stadium", b =>
-                {
-                    b.Navigation("Address")
-                        .IsRequired();
-
-                    b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("FootballBooking.Entities.Model.StadiumOwner", b =>
-                {
-                    b.Navigation("Stadiums");
                 });
 #pragma warning restore 612, 618
         }

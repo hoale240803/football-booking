@@ -17,9 +17,10 @@ namespace FootballBooking.Test
         [SetUp]
         public void Setup()
         {
-            var mockBaseRepository = new Mock<IBaseRepository<Booking>>();
-            var mockBaseService = new Mock<IBaseService<Booking>>();
-            var mockBookingService = new BookingService(mockBaseRepository.Object, mockBaseService.Object);
+            var mockBookingRepository = new Mock<IBookingRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            var mockBookingService = new BookingService(mockBookingRepository.Object, mockMapper.Object);
 
         }
 

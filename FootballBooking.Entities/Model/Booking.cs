@@ -2,19 +2,13 @@
 
 namespace FootballBooking.Entities.Model
 {
-    public class Booking : BaseEntity
+    public class Booking : BaseEntity<Guid>
     {
-        /// <summary>
-        /// Time book
-        /// </summary>
+        public Guid Id { get; set; }
         public DateTime BookTime { get; set; }
-
         public Guid StadiumId { get; set; }
-
-        public Stadium Stadium { get; set; }
-
         public Guid BookerId { get; set; }
 
-        public Booker Booker { get; set; }
+        public virtual User Booker { get; set; } = null!;
     }
 }

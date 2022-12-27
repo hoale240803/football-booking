@@ -6,12 +6,6 @@ namespace FootballBooking.Test.Repositories
 {
     public class MockBookingRepository : Mock<IBookingRepository>
     {
-        public MockBookingRepository GetBookings(IList<Booking> bookings)
-        {
-            Setup(x => x.FindAll()).Returns(bookings.AsQueryable());
-
-            return this;
-        }
 
         public MockBookingRepository GetBookingById(Booking bookingDetails)
         {

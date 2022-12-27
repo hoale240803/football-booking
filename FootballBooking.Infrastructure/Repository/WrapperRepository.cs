@@ -1,6 +1,5 @@
 ﻿using FootballBooking.Entities;
 using FootballBooking.Infrastructure.Interface;
-using System.Data;
 
 namespace FootballBooking.Infrastructure.Repository
 {
@@ -9,19 +8,17 @@ namespace FootballBooking.Infrastructure.Repository
         private readonly FootballBookingDbContext _footballBookingContext;
 
         private IBookingRepository? _booking;
-        private IBookerRepository? _booker;
         private IStadiumRepository? _stadium;
-        private IStadiumOwnerRepository? _stadiumOwner;
         private IAddressRepository? _address;
+        private IUserRepository? _user;
 
         public WrapperRepository(FootballBookingDbContext footballBookingContext)
         {
             _footballBookingContext = footballBookingContext;
         }
 
-        public WrapperRepository():this (new FootballBookingDbContext())
+        public WrapperRepository() : this(new FootballBookingDbContext())
         {
-           
         }
 
         public IBookingRepository Booking
@@ -34,19 +31,6 @@ namespace FootballBooking.Infrastructure.Repository
                     return _booking;
                 }
                 return _booking;
-            }
-        }
-
-        public IBookerRepository Booker
-        {
-            get
-            {
-                if (_booker == null)
-                {
-                    _booker = new BookerRepository(_footballBookingContext);
-                    return _booker;
-                }
-                return _booker;
             }
         }
 
@@ -63,16 +47,16 @@ namespace FootballBooking.Infrastructure.Repository
             }
         }
 
-        public IStadiumOwnerRepository StadiumOwner
+        public IUserRepository User
         {
             get
             {
-                if (_stadiumOwner == null)
+                if (_user == null)
                 {
-                    _stadiumOwner = new StadiumOwnerRepository(_footballBookingContext);
-                    return _stadiumOwner;
+                    _user = new UserRepository(_footballBookingContext);
+                    return _user;
                 }
-                return _stadiumOwner;
+                return _user;
             }
         }
 
@@ -119,6 +103,5 @@ namespace FootballBooking.Infrastructure.Repository
                 //_footballBookingContext.Dispose();
             }
         }
-
     }
 }

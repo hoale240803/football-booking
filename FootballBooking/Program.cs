@@ -7,25 +7,22 @@ builder.Services.ConfigureRepository();
 builder.Services.AddAppServices();
 builder.Services.ConfigureActionFilter();
 builder.Services.AddAutoMapper();
-
 builder.Services.AddControllers();
 
-
-    using IHost host = Host.CreateDefaultBuilder(args)
-                            .ConfigureHostConfiguration(configHost =>
-                            {
-                                configHost.SetBasePath(Directory.GetCurrentDirectory());
-                                configHost.AddJsonFile("appsettings.json", optional: true);
-                                configHost.AddEnvironmentVariables(prefix: "PREFIX_");
-                                configHost.AddCommandLine(args);
-                            }).Build();
-       
+//using IHost host = Host.CreateDefaultBuilder(args)
+//                        .ConfigureHostConfiguration(configHost =>
+//                        {
+//                            configHost.SetBasePath(Directory.GetCurrentDirectory());
+//                            configHost.AddJsonFile("appsettings.json", optional: true);
+//                            configHost.AddEnvironmentVariables(prefix: "PREFIX_");
+//                            configHost.AddCommandLine(args);
+//                        }).Build();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDatabase(builder.Configuration);
-
+builder.Services.AddJwtAuthentication();
 
 var app = builder.Build();
 
@@ -35,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

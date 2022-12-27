@@ -1,23 +1,23 @@
-﻿using FootballBooking.Entities.DTOs;
+﻿//using FootballBooking.Entities.DTOs;
+//using FootballBooking.Entities.Model;
 
-namespace FootballBooking.Application.Interface
-{
-    public interface IBaseService<T> where T : class
-    {
-        Task AddAsync(T entity);
+//namespace FootballBooking.Application.Interface
+//{
+//    public interface IBaseService<TEntity, TId> where TEntity : BaseEntity<TId>
+//    {
+//        Task AddAsync(TEntity entity);
 
-        Task AddManyAsync(IList<T> entities);
+//        Task AddManyAsync(IList<TEntity> entities);
 
-        Task DeleteAsync(Guid id);
+//        Task DeleteAsync(TId id);
 
-        Task DeleteManyAsync(IList<Guid> id);
 
-        Task<IEnumerable<T>> GetAllAsync(QueryParams queryParams);
+//        Task<IEnumerable<TEntity>> GetAllAsync(QueryParams queryParams);
 
-        Task UpdateAsync(T entity);
+//        Task UpdateAsync(TEntity entity);
 
-        Task UpdateManyAsync(IList<T> ids);
+//        Task UpdateManyAsync(IList<TEntity> ids);
 
-        Task<T> GetByIdAsync(Guid id);
-    }
-}
+//        Task<TEntity> GetByIdAsync(TId id);
+//    }
+//}

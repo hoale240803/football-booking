@@ -1,5 +1,6 @@
 ﻿using FootballBooking.Entities.EntityConfigurations;
 using FootballBooking.Entities.Model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,30 +18,27 @@ namespace FootballBooking.Entities
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("FootballBooking");
-            
-
         }
 
         public FootballBookingDbContext()
         {
-    
         }
 
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
 
-        public DbSet<Booker> Booker { get; set; }
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Stadium> Stadium { get; set; }
-        public DbSet<StadiumOwner> StadiumOwner { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<StadiumBooking> BookingStadium { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BookingEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new BookerEntityConfiguration());
             modelBuilder.ApplyConfiguration(new StadiumEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new StadiumOwnerEntityConfiguration());
             modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BookingStadiumEntityConfiguration());
         }
     }
 }

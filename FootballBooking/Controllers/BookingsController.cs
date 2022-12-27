@@ -24,7 +24,8 @@ namespace FootballBooking.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookings([FromQuery] QueryParams searchParams)
         {
-            return Ok(_mapper.Map<IList<BookingDTO>>(await _bookingService.GetBookings(searchParams)));
+            var result = _mapper.Map<IList<BookingDTO>>(await _bookingService.GetBookings(searchParams));
+            return Ok(result);
         }
 
         // GET api/bookings/5
@@ -32,9 +33,11 @@ namespace FootballBooking.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> GetBookingById(Guid id)
         {
-            var booking = await _bookingService.GetByIdAsync(id);
+            var booking = await _bookingService.GetBookingById(id);
 
-            return Ok(_mapper.Map<BookingDTO>(booking));
+            var result = _mapper.Map<BookingDTO>(booking);
+
+            return Ok(result);
         }
 
         // POST api/bookings
@@ -43,7 +46,8 @@ namespace FootballBooking.Controllers
         public async Task<IActionResult> CreateBooking([FromBody] BookingDTO booking)
         {
             var bookingEntity = _mapper.Map<Booking>(booking);
-            await _bookingService.AddAsync(bookingEntity);
+
+            await _bookingService.AddBookingAsync(bookingEntity);
 
             return Ok(true);
         }
@@ -54,14 +58,14 @@ namespace FootballBooking.Controllers
         {
             var bookingEntity = _mapper.Map<Booking>(booking);
             bookingEntity.Id = Id;
-            await _bookingService.UpdateAsync(bookingEntity);
+            await _bookingService.UpdateBookingAsync(bookingEntity);
         }
 
         // DELETE api/bookings/5
         [HttpDelete("{id}")]
         public async Task DeleteBooking(Guid id)
         {
-            await _bookingService.DeleteAsync(id);
+            await _bookingService.DeleteBookingAsync(id);
         }
     }
 }

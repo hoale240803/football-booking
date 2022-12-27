@@ -2,7 +2,8 @@
 
 namespace FootballBooking.Application.Interface
 {
-    public interface IAddressService : IBaseService<Address>
+    public interface IAddressService
     {
+
     }
 }

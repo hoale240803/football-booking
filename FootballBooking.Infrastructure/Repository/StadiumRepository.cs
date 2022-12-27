@@ -8,11 +8,10 @@ using FootballBooking.Entities.Model;
 using FootballBooking.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Data.Common;
 
 namespace FootballBooking.Infrastructure.Repository
 {
-    public class StadiumRepository : BaseRepository<Stadium>, IStadiumRepository
+    public class StadiumRepository : BaseRepository<Stadium, Guid>, IStadiumRepository
     {
         private readonly FootballBookingDbContext _dbContext;
 
@@ -26,7 +25,7 @@ namespace FootballBooking.Infrastructure.Repository
             await AddAsync(stadium);
         }
 
-        public async Task DeleteStadiumAsync(Guid stadiumId)
+        public async Task DeleteStadiumAsync(Stadium stadiumId)
         {
             await DeleteAsync(stadiumId);
         }
@@ -36,7 +35,10 @@ namespace FootballBooking.Infrastructure.Repository
             try
             {
                 var availableStadiumQuery = from stadium in _dbContext.Stadium
-                                            join stadiumOwner in _dbContext.StadiumOwner on stadium.StadiumOwnerId equals stadiumOwner.Id
+                                            from address in _dbContext.Address
+                                            from stadiumOwner in _dbContext.User
+                                            where stadium.Id == address.StadiumId && stadium.StadiumOwnerId == stadiumOwner.Id
+                                            && stadiumOwner.UserType == UserType.StadiumOwner
                                             orderby stadium.StadiumStatus
                                             select new StadiumRes
                                             {
@@ -44,9 +46,9 @@ namespace FootballBooking.Infrastructure.Repository
                                                 Name = stadium.Name,
                                                 Price = stadium.Price,
                                                 OwnerId = stadiumOwner.Id,
-                                                OwnerName = stadiumOwner.Name,
+                                                OwnerName = stadiumOwner.FirstName,
                                                 PhoneNumber = stadiumOwner.PhoneNumber,
-                                                Address = stadium.Address.Street,
+                                                Address = address.Street,
                                                 StadiumStatus = stadium.StadiumStatus,
                                             };
 
@@ -66,26 +68,7 @@ namespace FootballBooking.Infrastructure.Repository
 
         public async Task<PagedList<StadiumDTO>> GetStadiumsAsync(StadiumParams stadiumParams)
         {
-            //var stadiums = from stadium in _dbContext.Stadium
-            //               join stadiumOwner in _dbContext.StadiumOwner  on stadium.StadiumOwnerId equals stadiumOwner.Id
-            //               where stadium.Address.City.Contains(stadiumParams.Address.City) && stadium.Name.Contains(stadiumParams.Name)
-            //               select new StadiumDTO
-            //               {
-            //                   Id = stadium.Id,
-            //                   Name = stadium.Name,
-            //                   Price = stadium.Price,
-            //                   OwnerId = stadiumOwner.Id,
-            //                   OwnerName = stadiumOwner.Name,
-            //                   PhoneNumber = stadiumOwner.PhoneNumber,
-            //                   Address = stadium.Address.Street,
-            //                   StadiumStatus = stadium.StadiumStatus,
-            //               };
-
-            //stadiums = FindByCondition(s => s.Address.City == stadiumParams.Address.City);
-
-            //SearchByCity(ref stadiums, stadiumParams.Address.City);
-
-            var query = $"SELECT S.Id as Id, S.Name as Name, S.Price AS Price, S.StadiumStatus AS StadiumStatus, SO.Name AS OwerName, SO.PhoneNumber as PhoneNumber FROM Stadium AS S, StadiumOwner AS SO, Address AS A WHERE S.StadiumOwnerId = SO.Id AND S.Id = A.StadiumId AND A.City LIKE @City AND S.Name LIKE @Name";
+            var query = $"SELECT DISTINCT S.Id as Id, S.Name as Name, S.Price AS Price, S.StadiumStatus AS StadiumStatus, SO.[FirstName] AS OwerName, SO.[PhoneNumber] as PhoneNumber FROM Stadium AS S,[User] AS SO, Address AS A  WHERE S.StadiumOwnerId = SO.Id AND S.Id = A.StadiumId AND A.City LIKE @City OR S.[Name] LIKE @Name";
 
             var parameters = new DynamicParameters();
             parameters.Add("Name", "%" + stadiumParams.Name.Trim().ToLower() + "%", DbType.String);
@@ -93,10 +76,9 @@ namespace FootballBooking.Infrastructure.Repository
 
             using (var connection = _dbContext.CreateConnection())
             {
-                connection.Open();  
+                connection.Open();
                 try
                 {
-  
                     using (var transation = new DatabaseTransaction(_dbContext))
                     {
                         var stadiums = await connection.QueryAsync<StadiumDTO>(query, parameters);
@@ -122,18 +104,6 @@ namespace FootballBooking.Infrastructure.Repository
         {
             if (string.IsNullOrWhiteSpace(city))
                 return;
-
-            //stadiums = stadiums.Where(s => s.Address.City.ToLower().Contains(city)).Select(stadium => new StadiumDTO
-            //{
-            //    Id = stadium.Id,
-            //    Name = stadium.Name,
-            //    Price = stadium.Price,
-            //    OwnerId = stadiumOwner.Id,
-            //    OwnerName = stadiumOwner.Name,
-            //    PhoneNumber = stadiumOwner.PhoneNumber,
-            //    Address = stadium.Address.Street,
-            //    StadiumStatus = stadium.StadiumStatus,
-            //});
         }
 
         public Task UpdateStadiumAsync(Stadium stadium)

@@ -4,7 +4,7 @@
 
 namespace FootballBooking.Migrations
 {
-    public partial class Update_AddressTable_Allow_BookerId_StadiumId_null : Migration
+    public partial class Init_project : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

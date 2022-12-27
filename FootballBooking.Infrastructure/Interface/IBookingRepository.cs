@@ -2,7 +2,7 @@
 
 namespace FootballBooking.Infrastructure.Interface
 {
-    public interface IBookingRepository : IBaseRepository<Booking>
+    public interface IBookingRepository : IBaseRepository<Booking, Guid>
     {
     }
 }

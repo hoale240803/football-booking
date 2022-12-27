@@ -2,23 +2,21 @@
 
 namespace FootballBooking.Infrastructure.Interface
 {
-    public interface IBaseRepository<T> where T : BaseEntity
+    public interface IBaseRepository<TEntity, TId> where TEntity : BaseEntity<TId>
     {
-        Task AddAsync(T entity);
+        Task AddAsync(TEntity entity);
 
-        Task AddManyAsync(IList<T> entities);
+        Task AddManyAsync(IList<TEntity> entities);
 
-        Task UpdateAsync(T entity);
+        Task UpdateAsync(TEntity entity);
 
-        Task UpdateManyAsync(IList<T> entities);
+        Task UpdateManyAsync(IList<TEntity> entities);
 
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(TId id);
 
-        Task DeleteManyAsync(IList<Guid> ids);
+        Task<TEntity> GetByIdAsync(TId id);
 
-        Task<T> GetByIdAsync(Guid id);
-
-        IQueryable<T> FindAll();
+        Task<IEnumerable<TEntity>> FindAllAsync();
 
         IDatabaseTransaction BeginTransaction();
     }

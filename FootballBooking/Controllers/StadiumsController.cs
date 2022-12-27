@@ -23,21 +23,24 @@ namespace FootballBooking.Controllers
         [HttpGet("available")]
         public async Task<IActionResult> GetAvailableStadiums([FromQuery] QueryParams queryParams)
         {
-            return Ok(await _stadiumService.GetAvailableStadiumsAsync(queryParams));
+            var result = await _stadiumService.GetAvailableStadiumsAsync(queryParams);
+            return Ok(result);
         }
 
         // POST api/stadiums
         [HttpPost("search")]
         public async Task<IActionResult> GetStadiums([FromBody] StadiumParams queryParams)
         {
-            return Ok(await _stadiumService.GetStadiumsAsync(queryParams));
+            var result = await _stadiumService.GetStadiumsAsync(queryParams);
+            return Ok(result);
         }
 
         // GET api/stadiums/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStadiums(Guid id)
         {
-            return Ok(await _stadiumService.GetByIdAsync(id));
+            var result = await _stadiumService.GetStadiumByIdAsync(id);
+            return Ok(result);
         }
 
         // POST api/stadiums
@@ -46,7 +49,7 @@ namespace FootballBooking.Controllers
         {
             stadium.ValidateStadium();
             var stadiumEntity = _mapper.Map<Stadium>(stadium);
-            await _stadiumService.CreateStadiumAsync(stadiumEntity);
+            await _stadiumService.AddStadiumAsync(stadiumEntity);
         }
 
         // PUT api/stadiums
@@ -54,14 +57,14 @@ namespace FootballBooking.Controllers
         public async Task UpdateStadium([FromBody] StadiumDTO stadium)
         {
             var stadiumEntity = _mapper.Map<Stadium>(stadium);
-            await _stadiumService.UpdateAsync(stadiumEntity);
+            await _stadiumService.UpdateStadiumAsync(stadiumEntity);
         }
 
         // DELETE api/stadiums/{id}
         [HttpDelete]
         public async Task DeleteStadium(Guid id)
         {
-            await _stadiumService.DeleteAsync(id);
+            await _stadiumService.DeleteStadiumAsync(id);
         }
     }
 }

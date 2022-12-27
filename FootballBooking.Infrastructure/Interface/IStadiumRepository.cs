@@ -5,7 +5,7 @@ using FootballBooking.Entities.Model;
 
 namespace FootballBooking.Infrastructure.Interface
 {
-    public interface IStadiumRepository : IBaseRepository<Stadium>
+    public interface IStadiumRepository: IBaseRepository<Stadium, Guid>
     {
         Task<IList<StadiumRes>> GetAvailableStadiumsAsync(QueryParams queryParams);
 

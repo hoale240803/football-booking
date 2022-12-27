@@ -4,9 +4,9 @@ using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Infrastructure.Repository
 {
-    public class BookerRepository : BaseRepository<Booker>, IBookerRepository
+    public class UserRepository : BaseRepository<User, Guid>, IUserRepository
     {
-        public BookerRepository(FootballBookingDbContext footballBookingContext) : base(footballBookingContext)
+        public UserRepository(FootballBookingDbContext footballBookingContext) : base(footballBookingContext)
         {
         }
     }

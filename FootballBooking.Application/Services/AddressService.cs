@@ -1,12 +1,10 @@
 ﻿using FootballBooking.Application.Interface;
-using FootballBooking.Entities.Model;
-using FootballBooking.Infrastructure.Interface;
 
 namespace FootballBooking.Application.Services
 {
-    public class AddressService : BaseService<Address>, IAddressService
+    public class AddressService : IAddressService
     {
-        public AddressService(IBaseRepository<Address> baseRepository) : base(baseRepository)
+        public AddressService()
         {
         }
     }

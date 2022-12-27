@@ -3,10 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FootballBooking.Entities.Model
 {
-    public class BaseEntity
+    public abstract class BaseEntity<TId>
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public Guid Id { get; set; }
+        public TId Id { get; set; }
+    }
+
+    public abstract class AggregateRoot<TId> : BaseEntity<TId>
+    {
     }
 }
