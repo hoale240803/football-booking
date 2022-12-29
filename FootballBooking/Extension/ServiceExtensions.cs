@@ -1,7 +1,7 @@
 ﻿using FootballBooking.ActionFilters;
+using FootballBooking.Application.Configurations;
 using FootballBooking.Application.Interface;
 using FootballBooking.Application.Services;
-using FootballBooking.Configurations;
 using FootballBooking.Entities;
 using FootballBooking.Infrastructure.Interface;
 using FootballBooking.Infrastructure.Repository;
@@ -81,6 +81,8 @@ namespace FootballBooking.Extension
             services.AddScoped<IStadiumRepository, StadiumRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
 
             return services;
@@ -91,6 +93,8 @@ namespace FootballBooking.Extension
 
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IStadiumService, StadiumService>();
+            services.AddScoped<IAuthService, AuthService>();
+            //services.AddScoped<IUserService, UserService>();
 
             return services;
         }
@@ -102,6 +106,25 @@ namespace FootballBooking.Extension
         public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<CustomExceptionMiddlewares>();
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("<div> Hello World from the middleware 1 </div>");
+            //    await next.Invoke();
+            //    await context.Response.WriteAsync("<div> Returning from the middleware 1 </div>");
+            //});
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("<div> Hello World from the middleware 2 </div>");
+            //    await next.Invoke();
+            //    await context.Response.WriteAsync("<div> Returning from the middleware 2 </div>");
+            //});
+
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("<div> Hello World from the middleware 3 </div>");
+            //});
         }
 
         /// <summary>

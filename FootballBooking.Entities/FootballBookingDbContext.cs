@@ -31,6 +31,7 @@ namespace FootballBooking.Entities
         public DbSet<Address> Address { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<StadiumBooking> BookingStadium { get; set; }
+        public DbSet<UserLogin> UserLogin { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,7 @@ namespace FootballBooking.Entities
             modelBuilder.ApplyConfiguration(new StadiumEntityConfiguration());
             modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserLoginEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BookingStadiumEntityConfiguration());
         }
     }

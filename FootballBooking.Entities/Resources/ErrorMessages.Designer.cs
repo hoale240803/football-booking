@@ -79,6 +79,24 @@ namespace FootballBooking.Entities.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UserName was existed.
+        /// </summary>
+        public static string ExistingUserName {
+            get {
+                return ResourceManager.GetString("ExistingUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid token.
+        /// </summary>
+        public static string InvalidToken {
+            get {
+                return ResourceManager.GetString("InvalidToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stadium is not found.
         /// </summary>
         public static string StadiumNotFound {

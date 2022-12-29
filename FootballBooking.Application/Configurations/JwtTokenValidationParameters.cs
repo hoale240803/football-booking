@@ -1,4 +1,4 @@
-﻿namespace FootballBooking.Configurations
+﻿namespace FootballBooking.Application.Configurations
 {
     public class JwtTokenValidationParameters
     {

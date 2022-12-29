@@ -23,9 +23,9 @@ namespace FootballBooking.Entities.EntityConfigurations
             builder.Property(e => e.HashedPassword).HasMaxLength(255);
 
             builder.Property(e => e.UserName).HasMaxLength(255);
-            builder.Property(e => e.FirstName).HasMaxLength(255);
+            builder.Property(e => e.FirstName).HasMaxLength(255).IsRequired(false);
             builder.Property(e => e.PhoneNumber).HasMaxLength(255).IsRequired(false);
-            builder.Property(e => e.UserType);
+            builder.Property(e => e.UserType).HasConversion<int>().IsRequired();
         }
     }
 }

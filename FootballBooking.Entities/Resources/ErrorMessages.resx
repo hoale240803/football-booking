@@ -123,6 +123,12 @@
   <data name="AddressCityNotEmpty" xml:space="preserve">
     <value>City is not empty</value>
   </data>
+  <data name="ExistingUserName" xml:space="preserve">
+    <value>UserName was existed</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Invalid token</value>
+  </data>
   <data name="StadiumNotFound" xml:space="preserve">
     <value>Stadium is not found</value>
   </data>

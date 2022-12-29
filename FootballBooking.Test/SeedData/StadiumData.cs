@@ -1,9 +1,4 @@
 ﻿using FootballBooking.Entities.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FootballBooking.Test.SeedData
 {
@@ -17,8 +12,6 @@ namespace FootballBooking.Test.SeedData
             PageNumber = 1,
             PageSize = 10,
         };
-
-
 
         public static StadiumParams StadiumParams = new StadiumParams
         {
