@@ -83,14 +83,13 @@ namespace FootballBooking.Extension
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }
 
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
-
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IStadiumService, StadiumService>();
             services.AddScoped<IAuthService, AuthService>();
@@ -107,12 +106,12 @@ namespace FootballBooking.Extension
         {
             app.UseMiddleware<CustomExceptionMiddlewares>();
 
-            //app.Use(async (context, next) =>
-            //{
-            //    await context.Response.WriteAsync("<div> Hello World from the middleware 1 </div>");
-            //    await next.Invoke();
-            //    await context.Response.WriteAsync("<div> Returning from the middleware 1 </div>");
-            //});
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("<div> Hello World from the middleware 1 </div>");
+                await next.Invoke();
+                await context.Response.WriteAsync("<div> Returning from the middleware 1 </div>");
+            });
 
             //app.Use(async (context, next) =>
             //{

@@ -26,7 +26,10 @@ namespace FootballBooking.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterReq req)
         {
             var result = await _authService.RegisterAsync(req);
+            var result1 = await _authService.RegisterAsync(req);
             return Ok(result);
+
+
         }
     }
 }
